@@ -1,7 +1,10 @@
+using TMPro;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    public Transform inventoryUI;
+
     Rigidbody2D rb;
     Animator anim;
 
@@ -20,6 +23,20 @@ public class PlayerController : MonoBehaviour
             anim.speed = 0.0f;
         else
             anim.speed = 1.0f;
+
+        if (Input.GetKeyDown(KeyCode.I))
+        {
+            if (inventoryUI.gameObject.activeSelf == true)
+            {
+                inventoryUI.gameObject.SetActive(false);
+            }
+            else
+            {
+                string inventoryList = GetComponent<Inventory>().GetInventoryString();
+                inventoryUI.GetChild(1).GetComponent<TextMeshProUGUI>().text = inventoryList;
+                inventoryUI.gameObject.SetActive(true);
+            }
+        }
     }
 
     private void FixedUpdate()
