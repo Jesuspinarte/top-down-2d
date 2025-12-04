@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using TMPro;
 using UnityEngine;
@@ -41,12 +42,35 @@ public class MessageDisplay : MonoBehaviour
         messageUI.gameObject.SetActive(false);
     }
 
+    IEnumerator DoYesNo(string message, Action<bool> callback)
+    {
+        message += "\n(Y/N)";
+        messageUI.gameObject.SetActive(true);
+        textObject.text = message;
+        bool answer = false;
+
+        while (true)
+        {
+            if (Input.GetKeyDown("n")) { answer = false; break; }
+            if (Input.GetKeyDown("y")) { answer = true; break; }
+            yield return null;
+        }
+
+        messageUI.gameObject.SetActive(false);
+        callback(answer);
+    }
+
     public void ShowMessage(string message, float seconds)
     {
         StartCoroutine(DoMessage(message, seconds));
     }
 
-    public void ShhowMultineMessage(string message) {
+    public void ShowMultilineMessage(string message) {
         StartCoroutine(DoMultilineMessage(message));
+    }
+
+    public void YesNoMessage(string message, Action<bool> answerFunc)
+    {
+        StartCoroutine(DoYesNo(message, answerFunc));
     }
 }
